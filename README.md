@@ -17,7 +17,10 @@ Always open the script and check that this is what you want.
 
 3. Boot using the USB drive:
 
-4. Run the following commands on the terminal:
+4. Partition the disk, create root, swap and efi if needed, format them and mount them.
+This is described in Arch install guide.
+
+5. Run the following commands on the terminal:
 ```bash
 sudo pacman -Sy
 sudo pacman -S git
@@ -26,7 +29,7 @@ cd arch-setup
 ./install.sh
 ```
 
-5. Run `post_install.sh` script and follow instructions afterwards
+6. Run `post_install.sh` script and follow instructions afterwards
 
 ```bash
 ./install.sh

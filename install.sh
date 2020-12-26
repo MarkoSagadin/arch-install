@@ -64,17 +64,10 @@ timedatectl set-ntp true
 # mkswap /dev/sda2
 # swapon /dev/sda2
 
-
-# Install reflector that will update mirror list so we can download with pacstrap faster
-pacman -Syy
-pacman -S reflector
-cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
- reflector --verbose --latest 50 --sort rate --save /etc/pacman.d/mirrorlist
-
 # Install Arch Linux
 echo "Starting install.."
 echo "Installing Arch Linux"
-pacstrap /mnt 
+pacstrap /mnt \
         base \
         base-devel \
         linux \
