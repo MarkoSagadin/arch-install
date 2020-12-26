@@ -7,7 +7,7 @@ function install {
 
   if [ $? -ne 0 ]; then
     echo "Installing: ${1}..."
-    pacman -S $1
+    pacman -S --noconfirm$1
   else
     echo "Already installed: ${1}"
   fi
@@ -72,4 +72,4 @@ systemctl enable lightdm.service
 
 echo "Most of configuration is done. 
 You still need to create a new user and correctly setup rEFInd.
-After that you can write 'exit' and then 'shutdown now'"
+After that you can write 'exit'"
