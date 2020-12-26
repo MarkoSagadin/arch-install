@@ -21,7 +21,7 @@ Always open the script and check that this is what you want.
 ```bash
 sudo pacman -Sy
 sudo pacman -S git
-git clone 
+git clone https://github.com/MarkoSagadin/arch-install.git
 cd arch-setup
 ./install.sh
 ```
