@@ -16,7 +16,7 @@ function install {
 echo "Marko's Arch Post install script"
 
 # Set date time
-ln -sf /usr/share/zoneinfo/Asia/Kolkata /etc/localtime
+ln -sf /usr/share/zoneinfo/Europe/Ljubljana /etc/localtime
 hwclock --systohc
 
 # Set locale to en_US.UTF-8 UTF-8
@@ -29,25 +29,36 @@ echo "KEYMAP=slovene" >> /etc/vconsole.conf
 
 # Set hostname
 echo "127.0.0.1	localhost
-::1		    localhost
+::1	localhost
 127.0.1.1	arch-omen.localdomain	arch-omen" >> /etc/hosts
 echo "arch-omen" >> /etc/hostname
 
 # Set root password
 passwd
 
+# Find good mirrors for fast downloads
+pacman -Sy
+pacman -S reflector
+cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+reflector --verbose --latest 50 --sort rate --save /etc/pacman.d/mirrorlist
+
 # Various installs 
+install git
+install firefox
 # bootloader
 install refind-efi                          
 # processor specific
 install amd-ucode
 # graphics driver
 install nvidia                              
+install xf86-video-amdgpu                              
+install mesa
 # Desktop
 install xorg                                
 install xorg-server                         
 install xfce4                               
-install xfce4-goodies lightdm               
+install xfce4-goodies 
+install lightdm               
 install lightdm-webkit2-greeter             
 install lightdm-gtk-greeter-settings        
 # Network
@@ -61,7 +72,9 @@ install pavucontrol
 install pulseaudio 
 install alsa-utils
 
+# Install bootloader
 refind-install
+cp -rfv refind_linux.conf /boot
 
 # Enable networking
 systemctl enable NetworkManager.service
@@ -70,6 +83,19 @@ systemctl enable NetworkManager.service
 sed -i 's/#greeter-session=example-gtk-gnome/greeter-session=lightdm-webkit2-greeter/g' /etc/lightdm/lightdm.conf
 systemctl enable lightdm.service
 
-echo "Most of configuration is done. 
-You still need to create a new user and correctly setup rEFInd.
-After that you can write 'exit'"
+# Create new user
+read -p "Type the name of the new user" newuser
+useradd -m -G wheel,storage,power $newuser
+passwd $newuser
+echo "Enable sudo privileges for a newly created user $newuser"
+echo "Find line '%wheel ALL=(ALL) ALL' and uncomment it"
+read -p "Press any key to continue.." tmpvar
+EDITOR=vim visudo
+
+echo "----------------------------------------------------------------------------"
+echo "Most of configuration is done."
+echo "You still need to correctly setup rEFInd."
+echo "To do that run 'blkid /dev/<your_root_partition> >> /boot/refind_linux.conf'"
+echo "Open refind_linux.conf file and from the last line copy PARTUUID string into upper three lines."
+echo "Delete last line"
+echo "After that you can write 'exit'"

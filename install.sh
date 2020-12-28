@@ -80,19 +80,23 @@ pacstrap /mnt \
 genfstab -U /mnt >> /mnt/etc/fstab
 
 # Copy post-install system configuration script to new /root
-cp -rfv post-install.sh /mnt/root
-chmod a+x /mnt/root/post-install.sh
+cp -rfv post-install.sh /mnt
+chmod a+x /mnt/post-install.sh
+
+# Copy refind conf file to new boot
+cp -rfv refind_linux.conf /mnt
 
 # Chroot into new system
 echo "After chrooting into newly installed OS, please run the post-install.sh by executing ./post-install.sh"
 echo "Press any key to chroot..."
 read tmpvar
 arch-chroot /mnt
-cd /root
 
 # Finish
 echo "If post-install.sh was run succesfully, you will now have a fully working bootable Arch Linux system installed."
 echo "The only thing left is to reboot into the new system."
+echo "Remove installation medium."
 echo "Press any key to reboot or Ctrl+C to cancel..."
 read tmpvar
+unmount -R /mnt
 reboot
