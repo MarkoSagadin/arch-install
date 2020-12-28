@@ -67,7 +67,7 @@ refind-install
 systemctl enable NetworkManager.service
 
 # Enable Lightdm greeter
-sed -i 's/#greeter-session=/greeter-session=lightdm-webkit2-greeter/g' /etc/lightdm/lightdm.conf
+sed -i 's/#greeter-session=example-gtk-gnome/greeter-session=lightdm-webkit2-greeter/g' /etc/lightdm/lightdm.conf
 systemctl enable lightdm.service
 
 echo "Most of configuration is done. 
