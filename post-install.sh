@@ -71,6 +71,8 @@ install network-manager-applet
 install pavucontrol 
 install pulseaudio 
 install alsa-utils
+# Create user directories
+install xdg-user-dirs 
 
 # Install bootloader
 refind-install
@@ -83,6 +85,9 @@ systemctl enable NetworkManager.service
 sed -i 's/#greeter-session=example-gtk-gnome/greeter-session=lightdm-gtk-greeter/g' /etc/lightdm/lightdm.conf
 sed -i 's/#logind-check-graphical=false/logind-check-graphical=false/g' /etc/lightdm/lightdm.conf
 systemctl enable lightdm.service
+
+# Run to create user directories for the first time
+xdg-user-dirs-update
 
 # Create new user
 read -p "Type the name of the new user" newuser
