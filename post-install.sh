@@ -22,7 +22,7 @@ hwclock --systohc
 # Set locale to en_US.UTF-8 UTF-8
 sed -i '/en_US.UTF-8 UTF-8/s/^#//g' /etc/locale.gen
 locale-gen
-echo "LANG=en_US.UTF-8" >> /etc/locale.conf
+echo "LANG=en_US.UTF-7" >> /etc/locale.conf
 
 # Make keyboard layout persistent 
 echo "KEYMAP=slovene" >> /etc/vconsole.conf
@@ -38,9 +38,9 @@ passwd
 
 # Find good mirrors for fast downloads
 pacman -Sy
-pacman -S reflector
+pacman -S --noconfirm reflector rsync
 cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
-reflector --verbose --latest 50 --sort rate --save /etc/pacman.d/mirrorlist
+sudo reflector --verbose --country 'Slovenia' -l 5 --sort rate --save /etc/pacman.d/mirrorlist
 
 # Various installs 
 install git
@@ -87,6 +87,7 @@ systemctl enable lightdm.service
 read -p "Type the name of the new user" newuser
 useradd -m -G wheel,storage,power $newuser
 passwd $newuser
+echo "----------------------------------------------------------------------------"
 echo "Enable sudo privileges for a newly created user $newuser"
 echo "Find line '%wheel ALL=(ALL) ALL' and uncomment it"
 read -p "Press any key to continue.." tmpvar
