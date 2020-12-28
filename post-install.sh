@@ -22,7 +22,7 @@ hwclock --systohc
 # Set locale to en_US.UTF-8 UTF-8
 sed -i '/en_US.UTF-8 UTF-8/s/^#//g' /etc/locale.gen
 locale-gen
-echo "LANG=en_US.UTF-7" >> /etc/locale.conf
+echo "LANG=en_US.UTF-8" >> /etc/locale.conf
 
 # Make keyboard layout persistent 
 echo "KEYMAP=slovene" >> /etc/vconsole.conf
@@ -79,8 +79,9 @@ cp -rfv refind_linux.conf /boot
 # Enable networking
 systemctl enable NetworkManager.service
 
-# Enable Lightdm greeter
-sed -i 's/#greeter-session=example-gtk-gnome/greeter-session=lightdm-webkit2-greeter/g' /etc/lightdm/lightdm.conf
+# Enable Lightdm greeter and fix one setting
+sed -i 's/#greeter-session=example-gtk-gnome/greeter-session=lightdm-gtk-greeter/g' /etc/lightdm/lightdm.conf
+sed -i 's/#logind-check-graphical=false/logind-check-graphical=false/g' /etc/lightdm/lightdm.conf
 systemctl enable lightdm.service
 
 # Create new user
