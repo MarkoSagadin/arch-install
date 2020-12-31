@@ -51,16 +51,21 @@ install refind-efi
 install amd-ucode
 # graphics driver
 install nvidia                              
+install nvidia-utils
 install xf86-video-amdgpu                              
 install mesa
 # Desktop
 install xorg                                
 install xorg-server                         
-install xfce4                               
-install xfce4-goodies 
+install xorg-init
+install xorg-apps
+install i3-wm
 install lightdm               
-install lightdm-webkit2-greeter             
 install lightdm-gtk-greeter-settings        
+install rofi
+install dmenu
+install conky
+install thunar
 # Network
 install wpa_supplicant                      
 install wireless_tools                      
@@ -78,12 +83,19 @@ install xdg-user-dirs
 refind-install
 cp -rfv refind_linux.conf /boot
 
+
+# Blacklist opensource nvidia driver as we are using proprietary one.
+echo "blacklist nouveau" >> /usr/lib/modprobe.d/nvidia.conf
+
+
 # Enable networking
 systemctl enable NetworkManager.service
 
-# Enable Lightdm greeter and fix one setting
+# Enable Lightdm greeter, set to use i3 and fix one setting
 sed -i 's/#greeter-session=example-gtk-gnome/greeter-session=lightdm-gtk-greeter/g' /etc/lightdm/lightdm.conf
-sed -i 's/#logind-check-graphical=false/logind-check-graphical=false/g' /etc/lightdm/lightdm.conf
+sed -i 's/#logind-check-graphical=false/logind-check-graphical=true/g' /etc/lightdm/lightdm.conf
+sed -i 's/#autologin-session=/autologin-session=i3/g' /etc/lightdm/lightdm.conf
+
 systemctl enable lightdm.service
 
 # Run to create user directories for the first time
