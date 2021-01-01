@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# This is Configuration script of Marko's Arch Linux Installation Package.
+# This is a post-install script
 
 function install {
   which $1 &> /dev/null
@@ -54,6 +54,8 @@ install nvidia
 install nvidia-utils
 install xf86-video-amdgpu                              
 install mesa
+# device driver
+install libinput
 # Desktop
 install xorg                                
 install xorg-server                         
@@ -66,6 +68,7 @@ install rofi
 install dmenu
 install conky
 install thunar
+install alacritty
 # Network
 install wpa_supplicant                      
 install wireless_tools                      
@@ -100,6 +103,28 @@ systemctl enable lightdm.service
 
 # Run to create user directories for the first time
 xdg-user-dirs-update
+
+# Set slovene keyboard for X server
+setxkbmap si
+
+# Enable touchpad
+echo ' 
+ection "InputClass"
+        Identifier "libinput pointer catchall"
+        MatchIsPointer "on"
+        MatchDevicePath "/dev/input/event*"
+        Driver "libinput"
+EndSection
+
+Section "InputClass"
+        Identifier "libinput touchpad catchall"
+        MatchIsTouchpad "on"
+        MatchDevicePath "/dev/input/event*"
+        Option  "Tapping"           "True"
+        Option  "NaturalScrolling"  "True"
+        Driver  "libinput"
+EndSection
+' >> /etc/X11/xorg.conf.d/40-libinput.conf
 
 # Create new user
 read -p "Type the name of the new user" newuser
